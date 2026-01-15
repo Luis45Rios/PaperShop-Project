@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<ui:composition template="WEB-INF/template/base.xhtml">
+    <ui:define name="title-view">
+        J-Brew 1.0 - Inicio
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <div class="card">
+                <p:messages showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:messages>
+                <!-- Contenido principal -->
+                <p:panel>
+                    <p:graphicImage title="logo" url="images/Paper_Shop.png"/>
+                    <h4>Bienvenido a la aplicación para la gestión de:</h4>
+                    <ul class="bullets">
+                        <li><h5>Gestionar usuarios</h5></li>
+                        <li><h5>Gestionar pedidos de la cefetría</h5></li>
+                        <li><h5>Gestionar productos</h5></li>
+                        <li><h5>Reporte de ventas</h5></li>
+                    </ul>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:jsf="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<style>
+    .ui-stick{
+        top: 70px !important;
+    }
+
+    @media(max-width: 960px){
+        .ui-stick{
+            top: 110px !important;
+        }
+    }
+</style>
+
+<ui:composition>
+    <h:form>
+        <div id="panel-header" class="card">
+            <p:toolbar id="menu-tab">
+                <p:toolbarGroup align="right">
+                    <p:commandButton value="Login"
+                                     rendered="#{!facesContext.externalContext.sessionMap.containsKey('user')}"
+                                     action="/login.xhtml?faces-redit=true"/>
+
+                </p:toolbarGroup>
+            </p:toolbar>
+        </div>
+    </h:form>
+</ui:composition>
+</html>

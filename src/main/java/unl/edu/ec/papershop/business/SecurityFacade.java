@@ -2,6 +2,7 @@ package unl.edu.ec.papershop.business;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityNotFoundException;
 import unl.edu.ec.papershop.business.service.RoleRepository;
 import unl.edu.ec.papershop.business.service.UserRepository;
 import unl.edu.ec.papershop.domain.security.Role;
@@ -9,7 +10,6 @@ import unl.edu.ec.papershop.domain.security.User;
 import unl.edu.ec.papershop.exception.AlreadyEntityException;
 import unl.edu.ec.papershop.exception.CredentialInvalidException;
 import unl.edu.ec.papershop.exception.EncryptorException;
-import unl.edu.ec.papershop.exception.EntityNotFoundException;
 import unl.edu.ec.papershop.util.EncryptorManager;
 import java.io.Serializable;
 import java.util.LinkedHashSet;

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<ui:composition template="WEB-INF/template/base.xhtml">
+    <ui:define name="title-view">
+        PaperShop 1.0 - Ingreso
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <div class="card">
+                <p:messages showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:messages>
+                <p:panel id="panel" header="Inicio de Sesión">
+                    <h:panelGrid columns="3" cellpadding="7">
+                        <p:outputLabel for="username" value="Usuario: "/>
+                        <p:inputText id="username"
+                                     value="#{authenticationController.username}"
+                                     required="true"
+                                     label="Usuario"
+                                     placeholder="Nombre de usuario">
+                            <f:validateLength minimum="5"/>
+                        </p:inputText>
+                        <p:message for="username" showDetail="true" showSummary="true"/>
+
+                        <p:outputLabel for="password" value="Contraseña:" />
+                        <p:password id="password" value="#{authenticationController.password}"
+                                    required="true" toggleMask="true" redisplay="true">
+                            <f:validateLength minimum="8" for="password"/>
+                            <p:clientValidator/>
+                        </p:password>
+                        <p:message for="password" showDetail="true" showSummary="true"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Ingresar" action="#{authenticationController.login}"
+                                     icon="pi pi-user" validateClient="true" styleClass="mt-3"
+                                     update="@form" title="Accion de ingreso a la app"/>
+                    <p:commandButton value="Cancelar" action="index.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     icon="pi pi-times" styleClass="mt-3 ui-button-secondary"/>
+
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

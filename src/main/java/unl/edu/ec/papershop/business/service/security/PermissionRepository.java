@@ -1,4 +1,4 @@
-package unl.edu.ec.papershop.business.service;
+package unl.edu.ec.papershop.business.service.security;
 
 import jakarta.ejb.Stateless;
 import unl.edu.ec.papershop.domain.security.ActionType;

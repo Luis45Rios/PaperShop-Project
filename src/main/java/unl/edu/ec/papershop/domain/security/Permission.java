@@ -1,32 +1,40 @@
 package unl.edu.ec.papershop.domain.security;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
 
 @Entity
-@Table(name = "permissions")
-public class Permission {
+public class Permission implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String path;
+    /**
+     * Representa un recurso URI. Ej.: "/admin/usuarios"
+     */
+    @NotNull
+    private String resource;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "action_type", nullable = false)
-    private ActionType actionType;
+    private ActionType action;
 
-    // Constructores
-    public Permission() {}
-
-    public Permission(Long id, String path, ActionType actionType) {
-        this.id = id;
-        this.path = path;
-        this.actionType = actionType;
+    public Permission() {
     }
 
-    // Getters y Setters
+    public Permission(Long id, String resource, ActionType action) {
+        this.id = id;
+        this.resource = resource;
+        this.action = action;
+    }
+
+    public boolean matchWith(String requestResource, ActionType requestAction) {
+        return this.resource.equals(requestResource) &&
+                (this.action.equals(ActionType.ALL) || this.action.equals(requestAction));
+    }
+
     public Long getId() {
         return id;
     }
@@ -35,19 +43,41 @@ public class Permission {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public String getResource() {
+        return resource;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 
-    public ActionType getActionType() {
-        return actionType;
+    public ActionType getAction() {
+        return action;
     }
 
-    public void setActionType(ActionType actionType) {
-        this.actionType = actionType;
+    public void setAction(ActionType action) {
+        this.action = action;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Permission that = (Permission) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getResource(), that.getResource()) && getAction() == that.getAction();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getResource(), getAction());
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Permission{");
+        sb.append("id=").append(id);
+        sb.append(", resource='").append(resource).append('\'');
+        sb.append(", action=").append(action);
+        sb.append('}');
+        return sb.toString();
     }
 }

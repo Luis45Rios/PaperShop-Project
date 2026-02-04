@@ -12,7 +12,11 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_")
+@NamedQueries({
+        @NamedQuery(name = "User.findLikeName", query = "SELECT o FROM User o WHERE o.name LIKE :name"),
+        @NamedQuery(name = "User.findById", query = "SELECT o FROM User o WHERE o.id = :id")
+})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,19 +34,17 @@ public class User implements Serializable {
 
     @NotNull
     @NotEmpty
-    @Column(nullable = false)
     private String password;
 
     // Relationships
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "organization_id")
     private Organization organization;
 
@@ -50,12 +52,18 @@ public class User implements Serializable {
         roles = new HashSet<>();
     }
 
+    /**
+     * @param id
+     * @param name
+     * @param password
+     * @throws IllegalArgumentException
+     */
     public User(Long id,
                 @NotNull @NotEmpty String name,
                 @NotNull @NotEmpty String password) throws IllegalArgumentException {
         this();
         this.id = id;
-        validateNameRestriction(name);
+        //validateNameRestriction(name);
         this.setName(name);
         this.setPassword(password);
     }
@@ -68,6 +76,11 @@ public class User implements Serializable {
         this.organization = organization;
     }
 
+    /**
+     * Validaciones a nivel de modelo y negocio
+     * @param name
+     * @throws IllegalArgumentException
+     */
     private void validateNameRestriction(String name) throws IllegalArgumentException {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Valor requerido");
@@ -78,23 +91,6 @@ public class User implements Serializable {
         }
     }
 
-    // Método para verificar si tiene un rol específico
-    public boolean hasRole(String roleName) {
-        return roles.stream()
-                .anyMatch(role -> role.getName().equals(roleName));
-    }
-
-    // Método para verificar si es administrador
-    public boolean isAdmin() {
-        return hasRole("ADMIN");
-    }
-
-    // Método para verificar si es vendedor
-    public boolean isSeller() {
-        return hasRole("SELLER");
-    }
-
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -139,8 +135,7 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getName(), user.getName());
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName());
     }
 
     @Override
@@ -150,9 +145,11 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("User{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

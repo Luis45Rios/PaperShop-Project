@@ -7,7 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Organization implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,40 +19,27 @@ public abstract class Organization implements java.io.Serializable {
 
     @NotNull
     @NotEmpty
-    @Column(nullable = false, length = 200)
     private String name;
 
     @NotNull
-    @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "identification_type", nullable = false)
     private IdentificationType identificationType;
 
     @NotNull
     @NotEmpty
-    @Column(name = "identification_number", nullable = false, length = 13)
+    @Column(unique = true)
     private String identificationNumber;
 
     @NotNull
     @NotEmpty
     @Email(message = "Formato de email incorrecto")
-    @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(length = 20)
-    private String phone;
-
-    @Column(length = 300)
-    private String address;
-
-    @Column(name = "legal_representative", length = 150)
-    private String legalRepresentative;
-
     public Organization() {
-        setIdentificationType(IdentificationType.RUC); // Para papelería, por defecto RUC
+        setIdentificationType(IdentificationType.DNI);
         setCreationDate(LocalDate.now());
     }
 
@@ -69,7 +57,7 @@ public abstract class Organization implements java.io.Serializable {
         this.setEmail(email);
     }
 
-    // Getters y Setters
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -118,52 +106,28 @@ public abstract class Organization implements java.io.Serializable {
         this.email = email.trim();
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getLegalRepresentative() {
-        return legalRepresentative;
-    }
-
-    public void setLegalRepresentative(String legalRepresentative) {
-        this.legalRepresentative = legalRepresentative;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getName(), that.getName()) &&
-                Objects.equals(getIdentificationNumber(), that.getIdentificationNumber());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getCreationDate(), that.getCreationDate()) && getIdentificationType() == that.getIdentificationType() && Objects.equals(getIdentificationNumber(), that.getIdentificationNumber());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getIdentificationNumber());
+        return Objects.hash(getId(), getName(), getCreationDate(), getIdentificationType(), getIdentificationNumber());
     }
 
     @Override
     public String toString() {
-        return "Organization{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", identificationType=" + identificationType +
-                ", identificationNumber='" + identificationNumber + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("Organization{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", creationDate=").append(creationDate);
+        sb.append(", identificationType=").append(identificationType);
+        sb.append(", identificationNumber='").append(identificationNumber).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

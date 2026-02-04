@@ -3,16 +3,21 @@ package unl.edu.ec.papershop.business;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
-import unl.edu.ec.papershop.business.service.RoleRepository;
-import unl.edu.ec.papershop.business.service.UserRepository;
+import unl.edu.ec.papershop.business.service.security.RoleRepository;
+import unl.edu.ec.papershop.business.service.security.UserRepository;
 import unl.edu.ec.papershop.domain.security.Role;
 import unl.edu.ec.papershop.domain.security.User;
 import unl.edu.ec.papershop.exception.AlreadyEntityException;
 import unl.edu.ec.papershop.exception.CredentialInvalidException;
 import unl.edu.ec.papershop.exception.EncryptorException;
 import unl.edu.ec.papershop.util.EncryptorManager;
+
+import java.io.Serializable;
+import java.util.*;
+
 import java.io.Serializable;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Stateless
@@ -25,95 +30,70 @@ public class SecurityFacade implements Serializable {
     private RoleRepository roleRepository;
 
     public User createUser(User user) throws EncryptorException, AlreadyEntityException {
-        // Verificar si el usuario ya existe
-        if (userRepository.findByName(user.getName()) != null) {
-            throw new AlreadyEntityException("Usuario ya existe");
-        }
-
-        // Encriptar la contraseña
         String pwdEncripted = EncryptorManager.encrypt(user.getPassword());
         user.setPassword(pwdEncripted);
-
-        // Guardar el usuario
-        return userRepository.create(user);
+        try {
+            userRepository.find(user.getName());
+        } catch (EntityNotFoundException e) {
+            User userPersisted = userRepository.save(user);
+            return userPersisted;
+        }
+        throw new AlreadyEntityException("Usuario ya existe");
     }
 
-    public User registerEmployee(User user, String roleName) throws EncryptorException, AlreadyEntityException {
-        // Verificar si el usuario ya existe
-        if (userRepository.findByName(user.getName()) != null) {
-            throw new AlreadyEntityException("Empleado ya existe");
+    public User updateUser(User user) throws AlreadyEntityException, EncryptorException {
+        if (user.getId() == null){
+            return createUser(user);
         }
-
-        // Encriptar la contraseña
-        String pwdEncripted = EncryptorManager.encrypt(user.getPassword());
-        user.setPassword(pwdEncripted);
-
-        // Asignar rol (ADMIN o SELLER)
-        Role role = roleRepository.findByName(roleName);
-        if (role != null) {
-            user.getRoles().add(role);
+        String pwdEncrypted = EncryptorManager.encrypt(user.getPassword());
+        user.setPassword(pwdEncrypted);
+        try {
+            User userFound = userRepository.find(user.getName());
+            if  (!userFound.getId().equals(user.getId())){
+                throw new AlreadyEntityException("Ya existe otro usuario con ese nombre");
+            }
+        } catch (EntityNotFoundException ignored) {
         }
-
-        // Guardar el usuario
-        return userRepository.create(user);
+        return userRepository.save(user);
     }
 
     public User authenticate(String name, String password) throws CredentialInvalidException {
         try {
-            // Buscar usuario por nombre
-            User userFound = userRepository.findByName(name);
-            if (userFound == null) {
-                throw new CredentialInvalidException();
-            }
-
-            // Encriptar la contraseña proporcionada
+            User userFound = userRepository.find(name);
             String pwdEncrypted = EncryptorManager.encrypt(password);
-
-            // Comparar contraseñas
-            if (pwdEncrypted.equals(userFound.getPassword())) {
+            if (pwdEncrypted.equals(userFound.getPassword())){
                 return userFound;
             }
-
+            throw new CredentialInvalidException();
+        } catch (EntityNotFoundException e) {
             throw new CredentialInvalidException();
         } catch (EncryptorException e) {
-            throw new CredentialInvalidException("Error en autenticación", e);
+            throw new CredentialInvalidException("Credenciales incorrectas", e);
         }
     }
 
-    public Set<Role> findAllRolesWithPermission() {
-        // Obtener todos los roles
-        return new LinkedHashSet<>(roleRepository.findAll());
+    public Set<Role> findAllRolesWithPermission(){
+        return roleRepository.findAllWithPermissions();
     }
 
     public Set<Role> findRolesWithPermissionByUser(Long userId) throws EntityNotFoundException {
-        // Buscar usuario por ID
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new EntityNotFoundException("Usuario no encontrado");
-        }
-
-        // Devolver roles del usuario
-        return user.getRoles();
+        User user = userRepository.find(userId);
+        // Simulación de usuarios con rol ADMIN
+        Role  role = roleRepository.find("ADMIN");
+        Set<Role> roles = new LinkedHashSet<>();
+        roles.add(role);
+        return roles;
     }
 
-    public User assignRoleToUser(Long userId, String roleName) throws EntityNotFoundException {
-        // Buscar usuario por ID
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new EntityNotFoundException("Usuario no encontrado");
-        }
 
-        // Buscar rol por nombre
-        Role role = roleRepository.findByName(roleName);
-        if (role == null) {
-            throw new EntityNotFoundException("Rol no encontrado");
-        }
-
-        // Asignar rol al usuario
-        user.getRoles().clear(); // Limpiar roles existentes
-        user.getRoles().add(role);
-
-        // Actualizar usuario
-        return userRepository.update(user);
+    public List<User> findUsers(String criteria) throws EntityNotFoundException {
+        return userRepository.findWithLike(criteria);
     }
+
+    public User findUser(Long userId) throws EntityNotFoundException {
+        return  userRepository.find(userId);
+    }
+
+
+
 }

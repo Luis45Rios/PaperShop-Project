@@ -1,49 +1,80 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:p="primefaces">
-<ui:composition template="WEB-INF/template/base.xhtml">
-    <ui:define name="title-view">
-        PaperShop 1.0 - Ingreso
-    </ui:define>
-    <ui:define name="content">
-        <h:form>
-            <div class="card">
-                <p:messages showDetail="true" skipDetailIfEqualsSummary="true">
-                    <p:autoUpdate/>
-                </p:messages>
-                <p:panel id="panel" header="Inicio de Sesión">
-                    <h:panelGrid columns="3" cellpadding="7">
-                        <p:outputLabel for="username" value="Usuario: "/>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Login - PaperShop</title>
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: white;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <h1>📚 PaperShop</h1>
+                <h3>Papelería Dos Pinos</h3>
+            </div>
+
+            <h:form id="loginForm">
+                <p:panel header="Iniciar Sesión">
+                    <h:panelGrid columns="1" cellpadding="5">
+                        <p:outputLabel for="username" value="Usuario:" />
                         <p:inputText id="username"
                                      value="#{authenticationController.username}"
                                      required="true"
-                                     label="Usuario"
-                                     placeholder="Nombre de usuario">
-                            <f:validateLength minimum="5"/>
-                        </p:inputText>
-                        <p:message for="username" showDetail="true" showSummary="true"/>
+                                     requiredMessage="Usuario requerido"
+                                     placeholder="Ingrese su usuario"
+                                     style="width: 100%" />
 
                         <p:outputLabel for="password" value="Contraseña:" />
-                        <p:password id="password" value="#{authenticationController.password}"
-                                    required="true" toggleMask="true" redisplay="true">
-                            <f:validateLength minimum="8" for="password"/>
-                            <p:clientValidator/>
-                        </p:password>
-                        <p:message for="password" showDetail="true" showSummary="true"/>
-                    </h:panelGrid>|
-                    <p:commandButton value="Ingresar" action="#{authenticationController.login()}"
-                                     icon="pi pi-user" validateClient="true" styleClass="mt-3"
-                                     update="@form" title="Accion de ingreso a la app"/>
-                    <p:commandButton value="Cancelar" action="index.xhtml?faces-redirect=true"
-                                     immediate="true"
-                                     icon="pi pi-times" styleClass="mt-3 ui-button-secondary"/>
+                        <p:password id="password"
+                                    value="#{authenticationController.password}"
+                                    required="true"
+                                    requiredMessage="Contraseña requerida"
+                                    placeholder="Ingrese su contraseña"
+                                    feedback="false"
+                                    style="width: 100%" />
+                    </h:panelGrid>
 
+                    <p:separator />
+
+                    <p:commandButton value="Ingresar"
+                                     action="#{authenticationController.login}"
+                                     style="width: 100%;"
+                                     styleClass="ui-button-primary"
+                                     update="@form" />
+
+                    <p:messages globalOnly="true" showDetail="true" />
                 </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-</ui:composition>
+            </h:form>
+
+            <p style="text-align: center; margin-top: 1rem; color: #666;">
+                Sistema de Ventas - Papelería Dos Pinos
+            </p>
+        </div>
+    </div>
+</h:body>
 </html>

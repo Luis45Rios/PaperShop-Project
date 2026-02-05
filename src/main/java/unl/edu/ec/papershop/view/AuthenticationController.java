@@ -51,7 +51,7 @@ public class AuthenticationController implements java.io.Serializable {
             setHttpSession(user);
             FacesUtil.addSuccessMessageAndKeep("Aviso", "Bienvenido " + user.getName());
             userSession.postLogin(user);
-            return "dashboard.xhtml?faces-redirect=true";
+            return "/dashboard.xhtml?faces-redirect=true";
 
         } catch (CredentialInvalidException e) {
             FacesUtil.addErrorMessage("Inconveniente", e.getMessage());

@@ -3,8 +3,8 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.0">
-    <persistence-unit name="jbrewPU" transaction-type="JTA">
-        <jta-data-source>jdbc/jbrewDS</jta-data-source>
+    <persistence-unit name="papershop-PU" transaction-type="JTA">
+        <jta-data-source>jdbc/papershopDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <!-- CONFIGURACION DE CONEXION A LA BD -->
@@ -25,6 +25,7 @@
 
             <!-- database = ejecuta los comandos DDL directamente en la base de datos -->
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+            <property name="eclipselink.target-database" value="PostgreSQL"/>
 
             <!-- 2. Cargar script de inicialización de la BD -->
             <property name="jakarta.persistence.sql-load-script-source"  value="META-INF/initial-data.sql"/>

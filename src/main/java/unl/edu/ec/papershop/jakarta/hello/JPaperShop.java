@@ -1,9 +1,9 @@
-package edu.unl.cc.paperShop.jakarta.hello;
+package unl.edu.ec.papershop.jakarta.hello;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.ApplicationPath;
 
 @ApplicationPath("rest")
-public class HelloApplication extends Application {
+public class JPaperShop extends Application {
     // Needed to enable Jakarta REST and specify path.
 }

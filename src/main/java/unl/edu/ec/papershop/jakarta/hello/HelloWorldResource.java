@@ -1,4 +1,4 @@
-package edu.unl.cc.paperShop.jakarta.hello;
+package unl.edu.ec.papershop.jakarta.hello;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

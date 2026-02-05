@@ -1,4 +1,4 @@
-package unl.edu.ec.papershop.view.security;
+package unl.edu.ec.papershop.view;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.*;
@@ -6,12 +6,12 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import unl.edu.ec.papershop.domain.security.User;
-
+import unl.edu.ec.papershop.view.security.UserSession;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
-//@WebFilter("*.xhtml")
+@WebFilter("*.xhtml")
 public class AuthorizationFilter implements Filter {
 
     private static Logger logger = Logger.getLogger(AuthorizationFilter.class.getName());

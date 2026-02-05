@@ -23,7 +23,6 @@ public class UserSession implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = Logger.getLogger(UserSession.class.getName());
-
     @Inject
     private SecurityFacade securityFacade;
 

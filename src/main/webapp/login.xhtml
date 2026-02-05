@@ -3,95 +3,47 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="primefaces">
 <ui:composition template="WEB-INF/template/base.xhtml">
     <ui:define name="title-view">
-        PaperShop 1.0 - Papelería Dos Pinos
+        PaperShop 1.0 - Ingreso
     </ui:define>
     <ui:define name="content">
-        <h:form id="loginForm">
+        <h:form>
             <div class="card">
-                <p:messages id="messages" showDetail="true" skipDetailIfEqualsSummary="true">
+                <p:messages showDetail="true" skipDetailIfEqualsSummary="true">
                     <p:autoUpdate/>
                 </p:messages>
-
-                <!-- Contenido principal -->
-                <p:panel id="panel" header="Inicio de Sesión - Papelería Dos Pinos" styleClass="login-panel">
+                <p:panel id="panel" header="Inicio de Sesión">
                     <h:panelGrid columns="3" cellpadding="7">
-                        <p:outputLabel for="username" value="Usuario: " />
+                        <p:outputLabel for="username" value="Usuario: "/>
                         <p:inputText id="username"
                                      value="#{authenticationController.username}"
                                      required="true"
                                      label="Usuario"
-                                     placeholder="Nombre de usuario"
-                                     styleClass="login-input">
+                                     placeholder="Nombre de usuario">
                             <f:validateLength minimum="5"/>
                         </p:inputText>
                         <p:message for="username" showDetail="true" showSummary="true"/>
 
                         <p:outputLabel for="password" value="Contraseña:" />
-                        <p:password id="password"
-                                    value="#{authenticationController.password}"
-                                    required="true"
-                                    toggleMask="true"
-                                    feedback="false"
-                                    placeholder="Ingrese su contraseña"
-                                    styleClass="login-input">
-                            <f:validateLength minimum="8"/>
+                        <p:password id="password" value="#{authenticationController.password}"
+                                    required="true" toggleMask="true" redisplay="true">
+                            <f:validateLength minimum="8" for="password"/>
+                            <p:clientValidator/>
                         </p:password>
                         <p:message for="password" showDetail="true" showSummary="true"/>
-                    </h:panelGrid>
-
-                    <div style="margin-top: 20px;">
-                        <p:commandButton value="Ingresar"
-                                         action="#{authenticationController.login}"
-                                         icon="pi pi-sign-in"
-                                         validateClient="true"
-                                         styleClass="login-button"
-                                         update="messages"
-                                         title="Acceder al sistema PaperShop"/>
-
-                        <p:commandButton value="Cancelar"
-                                         action="index.xhtml?faces-redirect=true"
-                                         immediate="true"
-                                         icon="pi pi-times"
-                                         styleClass="cancel-button"/>
-                    </div>
+                    </h:panelGrid>|
+                    <p:commandButton value="Ingresar" action="#{authenticationController.login()}"
+                                     icon="pi pi-user" validateClient="true" styleClass="mt-3"
+                                     update="@form" title="Accion de ingreso a la app"/>
+                    <p:commandButton value="Cancelar" action="index.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     icon="pi pi-times" styleClass="mt-3 ui-button-secondary"/>
 
                 </p:panel>
             </div>
         </h:form>
-
-        <style>
-            .login-panel {
-                max-width: 400px;
-                margin: 50px auto;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-
-            .login-input {
-                width: 100%;
-            }
-
-            .login-button {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border: none;
-                margin-right: 10px;
-            }
-
-            .login-button:hover {
-                background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-            }
-
-            .cancel-button {
-                background: #6c757d;
-                border: none;
-            }
-
-            .cancel-button:hover {
-                background: #5a6268;
-            }
-        </style>
     </ui:define>
 </ui:composition>
 </html>

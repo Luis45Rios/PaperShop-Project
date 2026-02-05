@@ -78,10 +78,7 @@ public class SecurityFacade implements Serializable {
 
     public Set<Role> findRolesWithPermissionByUser(Long userId) throws EntityNotFoundException {
         User user = userRepository.find(userId);
-        // Simulación de usuarios con rol ADMIN
-        Role  role = roleRepository.find("ADMIN");
-        Set<Role> roles = new LinkedHashSet<>();
-        roles.add(role);
+        Set<Role> roles = new LinkedHashSet<>(roleRepository.findByUserId(user.getId()));
         return roles;
     }
 

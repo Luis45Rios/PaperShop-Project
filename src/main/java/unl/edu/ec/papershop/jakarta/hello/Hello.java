@@ -1,4 +1,4 @@
-package edu.unl.cc.paperShop.jakarta.hello;
+package unl.edu.ec.papershop.jakarta.hello;
 
 public class Hello {
 

@@ -7,5 +7,26 @@
     </basicRegistry>
     <keyStore id="defaultKeyStore" password="password" />
     <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080" httpsPort="9443" />
-    <webApplication location="paperShop-app.war" contextRoot="/"/>
+    <webApplication location="papershop-app.war" contextRoot="/"/>
+
+    <!-- Configuracion de salidas de log del server -->
+    <logging consoleFormat="SIMPLE" consoleLogLevel="INFO" />
+    <logging messageFormat="TBASIC" messageLogLevel="INFO" />
+    <!--logging traceFormat="ENHANCED" traceSpecification="*=all" /-->
+    <logging  traceSpecification="JPA=all" />
+
+    <dataSource jndiName="jdbc/papershopDS">
+        <jdbcDriver id="postgres-driver" libraryRef="jdbcLib"/>
+        <properties.postgresql serverName="${db.server.name}"
+                               portNumber="${db.port.number}"
+                               databaseName="papershop-db"
+                               user="papershop-user"
+                               password="papershop-pass123"/>
+    </dataSource>
+
+    <!-- Referencia al driver JDBC de Postgres -->
+    <library id="jdbcLib">
+        <fileset dir="${driver.jdbc.dir}" includes="postgresql-*.jar"/>
+    </library>
 </server>
+

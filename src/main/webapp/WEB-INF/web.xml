@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
 
-    <!-- Overring system levels default configuration usage of XML-->
+    <!-- Configuraciones de PrimeFaces -->
     <context-param>
         <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
         <param-value>true</param-value>
@@ -16,20 +16,18 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>saga-blue</param-value>
     </context-param>
-
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
         <param-value>true</param-value>
     </context-param>
 
-    <!--
+    <!-- Para desarrollo, activar etapa de desarrollo -->
     <context-param>
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-    -->
 
-    <!-- Deshabilitar la implementación de JSF de Liberty -->
+    <!-- Deshabilitar la implementación de JSF de Liberty si es necesario -->
     <!--
     <context-param>
         <param-name>jakarta.faces.DISABLE_FACESSERVLET_TO_XHTML</param-name>
@@ -37,6 +35,7 @@
     </context-param>
     -->
 
+    <!-- Configuración del FacesServlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
@@ -46,23 +45,16 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    <!--
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/jakarta.faces.resource/*</url-pattern>
-        <url-pattern>/javax.faces.resource/*</url-pattern>
-    </servlet-mapping>
-    -->
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Login Page</web-resource-name>
-            <url-pattern>/login.xhtml</url-pattern>
-        </web-resource-collection>
-    </security-constraint>
+    <!-- Configuración de la sesión -->
+    <session-config>
+        <session-timeout>30</session-timeout> <!-- 30 minutos -->
+    </session-config>
 
+    <!-- Página de bienvenida: redirigir a login -->
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
 </web-app>

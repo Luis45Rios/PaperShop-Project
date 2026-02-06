@@ -12,8 +12,6 @@ import unl.edu.ec.papershop.exception.CredentialInvalidException;
 import unl.edu.ec.papershop.exception.EncryptorException;
 import unl.edu.ec.papershop.util.EncryptorManager;
 
-import java.io.Serializable;
-import java.util.*;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -78,7 +76,10 @@ public class SecurityFacade implements Serializable {
 
     public Set<Role> findRolesWithPermissionByUser(Long userId) throws EntityNotFoundException {
         User user = userRepository.find(userId);
-        Set<Role> roles = new LinkedHashSet<>(roleRepository.findByUserId(user.getId()));
+        // Simulación de usuarios con rol ADMIN
+        Role  role = roleRepository.find("ADMIN");
+        Set<Role> roles = new LinkedHashSet<>();
+        roles.add(role);
         return roles;
     }
 

@@ -47,7 +47,9 @@ public class Person extends Organization {
     }
 
     public void setFirstName(@NotNull @NotEmpty String firstName) {
+
         this.firstName = firstName.trim().toUpperCase();
+        setName(getFullName());
     }
 
     public String getLastName() {
@@ -55,7 +57,10 @@ public class Person extends Organization {
     }
 
     public void setLastName(@NotNull @NotEmpty String lastName) {
+
         this.lastName = lastName.trim().toUpperCase();
+        setName(getFullName());
+
     }
 
     public GenderType getGender() {

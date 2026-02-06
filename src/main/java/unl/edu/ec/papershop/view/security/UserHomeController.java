@@ -88,6 +88,10 @@ public class UserHomeController implements java.io.Serializable{
         }
     }
 
+    public Person getPerson() {
+        return (Person) user.getOrganization();
+    }
+
     public boolean isManaged(){
         return this.user.getId() != null;
     }

@@ -3,7 +3,7 @@ package unl.edu.ec.papershop.view.security;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import unl.edu.ec.papershop.business.SecurityFacade;
 import unl.edu.ec.papershop.domain.security.ActionType;
@@ -28,7 +28,7 @@ public class UserSession implements java.io.Serializable{
 
     private User user;
 
-    public void postLogin(@NotNull User user) throws EntityNotFoundException {
+    public void postLogin(@NotNull User user) throws EntityNotFoundException, unl.edu.ec.papershop.exception.EntityNotFoundException {
         logger.info("User logged in: " + user.getName());
         this.user = user;
         Set<Role> roles = securityFacade.findRolesWithPermissionByUser(this.user.getId());

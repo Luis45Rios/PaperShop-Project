@@ -44,7 +44,7 @@ public class AuthenticationController implements java.io.Serializable {
     @Inject
     private UserSession userSession;
 
-    public String login() {
+    public String login() throws EntityNotFoundException {
         logger.info("Intento de login para usuario: " + username);
         try {
             User user = securityFacade.authenticate(username, password);

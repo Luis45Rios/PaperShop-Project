@@ -1,11 +1,12 @@
 package unl.edu.ec.papershop.business.service.security;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import unl.edu.ec.papershop.business.service.CrudGenericService;
 import unl.edu.ec.papershop.domain.security.User;
 import jakarta.ejb.Stateless;
+import unl.edu.ec.papershop.exception.EntityNotFoundException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

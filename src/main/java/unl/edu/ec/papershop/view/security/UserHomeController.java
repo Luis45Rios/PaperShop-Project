@@ -34,7 +34,7 @@ public class UserHomeController implements java.io.Serializable{
     public UserHomeController() {
     }
 
-    public void loadUser() {
+    public void loadUser() throws EntityNotFoundException {
         logger.info("Loading user with id: " + selectedUserId);
         if (selectedUserId != null) {
             user = securityFacade.findUser(selectedUserId);

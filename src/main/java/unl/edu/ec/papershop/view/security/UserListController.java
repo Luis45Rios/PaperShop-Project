@@ -34,12 +34,12 @@ public class UserListController implements java.io.Serializable{
     }
 
     @PostConstruct
-    public void init() {
+    public void init() throws EntityNotFoundException {
         logger.info("****** POST CONSTRUCTOR: " + getCriteria() + " ******");
         this.search();
     }
 
-    public void search()  {
+    public void search() throws EntityNotFoundException {
         logger.info("****** Ingreso a buscar con: " + getCriteriaBuffer() + " ******");
         users = securityFacade.findUsers(getCriteriaBuffer());
     }

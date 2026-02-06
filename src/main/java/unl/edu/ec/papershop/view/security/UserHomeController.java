@@ -1,5 +1,6 @@
 package unl.edu.ec.papershop.view.security;
 
+
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -9,7 +10,6 @@ import unl.edu.ec.papershop.domain.security.User;
 import unl.edu.ec.papershop.exception.EntityNotFoundException;
 import unl.edu.ec.papershop.faces.FacesUtil;
 import unl.edu.ec.papershop.util.EncryptorManager;
-
 
 import java.io.Serial;
 import java.util.logging.Logger;
@@ -34,7 +34,7 @@ public class UserHomeController implements java.io.Serializable{
     public UserHomeController() {
     }
 
-    public void loadUser() throws EntityNotFoundException {
+    public void loadUser() {
         logger.info("Loading user with id: " + selectedUserId);
         if (selectedUserId != null) {
             user = securityFacade.findUser(selectedUserId);

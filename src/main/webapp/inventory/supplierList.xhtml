@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="../WEB-INF/template/base.xhtml">
+
+    <ui:define name="title-view">
+        🚚 Proveedores
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="supplierForm">
+
+            <p:panel header="🚚 Gestión de Proveedores">
+
+                <!-- BUSCADOR -->
+                <div style="margin-bottom:15px">
+                    <p:inputText placeholder="Buscar proveedor..."
+                                 value="#{supplierController.searchText}">
+                        <p:ajax event="keyup"
+                                update="supplierTable"
+                                listener="#{supplierController.search}"/>
+                    </p:inputText>
+
+                    <p:commandButton value="➕ Nuevo Proveedor"
+                                     process="@this"
+                                     icon="pi pi-plus"
+                                     style="margin-left:10px"
+                                     actionListener="#{supplierController.newSupplier}"
+                                     update="supplierDialog"
+                                     oncomplete="PF('supplierDialog').show()"/>
+                </div>
+
+                <!-- TABLA -->
+                <p:dataTable id="supplierTable"
+                             var="s"
+                             value="#{supplierController.suppliers}"
+                             paginator="true"
+                             rows="5"
+                             responsiveLayout="scroll">
+
+                    <p:column headerText="Nombre">
+                        #{s.name}
+                    </p:column>
+
+                    <p:column headerText="Teléfono">
+                        #{s.phone}
+                    </p:column>
+
+                    <p:column headerText="Correo">
+                        #{s.email}
+                    </p:column>
+
+                    <p:column headerText="Acciones" style="width:150px">
+                        <p:commandButton icon="pi pi-pencil"
+                                         title="Editar"
+                                         update="supplierDialog"
+                                         actionListener="#{supplierController.editSupplier(s)}"
+                                         oncomplete="PF('supplierDialog').show()"/>
+
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Eliminar"
+                                         styleClass="ui-button-danger"
+                                         actionListener="#{supplierController.deleteSupplier(s)}"
+                                         update="supplierTable"
+                                         onclick="return confirm('¿Eliminar proveedor?');"/>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+
+            <!-- DIALOGO CREAR / EDITAR -->
+            <p:dialog id="supplierDialog"
+                      widgetVar="supplierDialog"
+                      modal="true"
+                      header="Proveedor"
+                      width="400">
+
+                <p:panelGrid columns="2" columnClasses="label,value">
+
+                    <p:outputLabel value="Nombre:"/>
+                    <p:inputText value="#{supplierController.selectedSupplier.name}" required="true"/>
+
+                    <p:outputLabel value="Teléfono:"/>
+                    <p:inputText value="#{supplierController.selectedSupplier.phone}"/>
+
+                    <p:outputLabel value="Correo:"/>
+                    <p:inputText value="#{supplierController.selectedSupplier.email}"/>
+
+                </p:panelGrid>
+
+                <div style="margin-top:15px; text-align:right">
+                    <p:commandButton value="Guardar"
+                                     process="supplierDialog"
+                                     icon="pi pi-check"
+                                     actionListener="#{supplierController.save}"
+                                     update="supplierTable"
+                                     oncomplete="PF('supplierDialog').hide()"/>
+
+                    <p:commandButton value="Cancelar"
+                                     immediate="true"
+                                     icon="pi pi-times"
+                                     styleClass="ui-button-secondary"
+                                     onclick="PF('supplierDialog').hide()"/>
+                </div>
+
+            </p:dialog>
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

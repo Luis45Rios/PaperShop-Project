@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Crear Venta</title>
+</h:head>
+
+<h:body>
+
+    <h:form id="saleForm">
+
+        <!-- ================= NOTA DE VENTA ================= -->
+        <p:panel header="🛒Nota de Venta">
+
+            <p:panelGrid columns="6" layout="grid" styleClass="ui-fluid">
+
+                <p:outputLabel value="Cédula:"/>
+                <p:inputText value="#{saleBean.cedula}"/>
+
+                <p:outputLabel value="Nombre:" />
+                <p:inputText value="#{saleBean.nombreCliente}"/>
+
+                <p:outputLabel value="Celular:"/>
+                <p:inputText value="#{saleBean.celular}"/>
+
+                <p:outputLabel value="Dirección:"/>
+                <p:inputText value="#{saleBean.direccion}"/>
+
+                <p:outputLabel value="Email:"/>
+                <p:inputText value="#{saleBean.email}" />
+
+            </p:panelGrid>
+        </p:panel>
+
+        <br/>
+
+        <!-- ================= DETALLE DE VENTA ================= -->
+        <p:panel header="Detalle de Venta">
+
+            <p:panelGrid columns="4" layout="grid" styleClass="ui-fluid">
+
+                <p:outputLabel value="Producto" />
+                <p:inputText value="#{saleBean.itemVenta.nombreProducto}" />
+
+                <p:outputLabel value="Cantidad" />
+                <p:inputNumber value="#{saleBean.itemVenta.cantidad}" minValue="1" />
+
+                <p:outputLabel value="Precio PVP" />
+                <p:inputNumber value="#{saleBean.itemVenta.precioUnitario}" decimalPlaces="2" />
+
+                <p:commandButton value="Agregar"
+                                 action="#{saleBean.agregarItem}"
+                                 update="tabla totales" />
+
+            </p:panelGrid>
+
+            <br/>
+
+            <!-- TABLA DE ITEMS -->
+            <p:dataTable id="tabla" value="#{saleBean.items}" var="item">
+
+                <p:column headerText="Producto">
+                    #{item.nombreProducto}
+                </p:column>
+
+                <p:column headerText="Cantidad">
+                    #{item.cantidad}
+                </p:column>
+
+                <p:column headerText="Precio">
+                    #{item.precioUnitario}
+                </p:column>
+
+                <p:column headerText="Subtotal">
+                    #{item.calcularSubTotal()}
+                </p:column>
+
+                <p:column headerText="IVA">
+                    #{item.calcularSubTotalIva()}
+                </p:column>
+
+                <p:column headerText="Total">
+                    #{item.calcularTotal()}
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+
+        <br/>
+
+        <!-- ================= TOTALES ================= -->
+        <p:panel header="Totales">
+
+            <p:panelGrid id="totales" columns="2">
+
+                <h:outputText value="Subtotal:" />
+                <h:outputText value="#{saleBean.subtotal}" />
+
+                <h:outputText value="IVA:" />
+                <h:outputText value="#{saleBean.iva}" />
+
+                <h:outputText value="Total:" />
+                <h:outputText value="#{saleBean.total}" />
+
+            </p:panelGrid>
+
+        </p:panel>
+
+        <br/>
+
+        <!-- ================= GUARDAR ================= -->
+        <p:commandButton value="Guardar Venta"
+                         icon="pi pi-save"
+                         action="#{saleBean.guardarVenta}" />
+
+    </h:form>
+
+</h:body>
+</html>

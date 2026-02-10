@@ -1,19 +1,29 @@
 package unl.edu.ec.papershop.business;
 
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import unl.edu.ec.papershop.business.service.ProductService;
 import unl.edu.ec.papershop.domain.Product;
+import unl.edu.ec.papershop.domain.Report;
+import unl.edu.ec.papershop.exception.EntityNotFoundException;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Stateless
+@ApplicationScoped
 public class PapershopFacade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public List<Product> getAllProducts(){
-        return new ArrayList<Product>();
+    @Inject
+    private ProductService productService;
+
+    public List<Product> getAllProducts() {
+        return productService.findAll();
     }
 
+    public Product createProduct(Product product) {
+        return productService.save(product);
+    }
 }

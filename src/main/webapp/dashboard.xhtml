@@ -23,7 +23,7 @@
                 transform: translateY(-5px);
                 box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             }
-            .card-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.card-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
             .card-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
             .card-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
             .card-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
@@ -32,11 +32,17 @@
                 margin-bottom: 10px;
             }
 
-            .dashboard-container {
+.dashboard-container {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 20px;
                 margin-bottom: 30px;
+            }
+
+            @media (max-width: 768px) {
+                .dashboard-container {
+                    grid-template-columns: 1fr;
+                }
             }
 
             @media (max-width: 768px) {
@@ -53,8 +59,8 @@
                 <div style="padding: 20px;">
                     <h1 style="color: #333; margin-bottom: 30px;">📊 Dashboard - PaperShop</h1>
 
-                    <div class="dashboard-container">
-                        <div class="dashboard-card card-1" onclick="window.location.href='/inventory/productList.xhtml'">
+<div class="dashboard-container">
+                        <div class="dashboard-card card-1" onclick="window.location.href='products.xhtml'">
                             <div class="card-icon">📦</div>
                             <h2>Productos</h2>
                             <p>Gestión de inventario</p>
@@ -65,13 +71,13 @@
                             <p>Registrar ventas</p>
                         </div>
 
-                        <div class="dashboard-card card-3" onclick="window.location.href='/inventory/supplierList.xhtml'">
+<div class="dashboard-card card-3" onclick="window.location.href='inventory/supplierList.xhtml'">
                             <div class="card-icon">🚚</div>
                             <h2>Proveedores</h2>
                             <p>Gestión de proveedores</p>
                         </div>
 
-                        <div class="dashboard-card card-4" onclick="window.location.href='/reports/salesReport.xhtml'">
+                        <div class="dashboard-card card-4" onclick="window.location.href='reports.xhtml'">
                             <div class="card-icon">📊</div>
                             <h2>Reportes</h2>
                             <p>Estadísticas de ventas</p>
@@ -84,20 +90,20 @@
                                      paginator="true"
                                      rows="5"
                                      paginatorPosition="bottom">
-                            <p:column headerText="Producto">
-                                #{producto.nombre}
+<p:column headerText="Producto">
+                                #{producto.name}
                             </p:column>
                             <p:column headerText="Precio">
-                                <h:outputText value="#{producto.pvp}">
+                                <h:outputText value="#{producto.price}">
                                     <f:convertNumber type="currency" />
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Categoría">
-                                #{producto.tipo}
+                                #{producto.category.name}
                             </p:column>
                             <p:column headerText="Estado">
-                        <span class="status-badge #{producto.stock > 0 ? 'status-active' : 'status-inactive'}">
-                            #{producto.stock > 0 ? 'Disponible' : 'Agotado'}
+                        <span class="status-badge #{producto.active ? 'status-active' : 'status-inactive'}">
+                            #{producto.active ? 'Disponible' : 'Agotado'}
                         </span>
                             </p:column>
                         </p:dataTable>

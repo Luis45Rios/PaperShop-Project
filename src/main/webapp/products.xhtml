@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<ui:composition template="WEB-INF/template/base.xhtml">
+    <ui:define name="title-view">
+        📦 Productos - PaperShop
+    </ui:define>
+    <ui:define name="content">
+        <style>
+            .products-container {
+                padding: 20px;
+            }
+            .form-section {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+        </style>
+        
+        <h:form>
+            <div class="card">
+                <p:messages id="messages" showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:messages>
+                
+                <div class="products-container">
+                    <h1 style="color: #333; margin-bottom: 30px;">📦 Gestión de Productos</h1>
+                    
+                    <p:panel header="Registrar Nuevo Producto" styleClass="form-section">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-6">
+                                <p:outputLabel for="productName" value="Nombre del Producto:"/>
+                                <p:inputText id="productName" 
+                                            value="#{productController.selectedProduct.name}"
+                                            required="true"
+                                            style="width: 100%"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <p:outputLabel for="productPrice" value="Precio:"/>
+                                <p:inputNumber id="productPrice" 
+                                             value="#{productController.selectedProduct.price}"
+                                             required="true"
+                                             decimalPlaces="2"
+                                             symbol="$"
+                                             style="width: 100%"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:outputLabel for="productDescription" value="Descripción:"/>
+                                <p:inputTextarea id="productDescription" 
+                                               value="#{productController.selectedProduct.description}"
+                                               rows="3"
+                                               style="width: 100%"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <p:outputLabel for="productActive" value="Estado:"/>
+                                <p:selectBooleanCheckbox id="productActive" 
+                                                       value="#{productController.selectedProduct.active}"
+                                                       itemLabel="Activo"
+                                                       style="margin-top: 8px;"/>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: right; margin-top: 20px;">
+                            <p:commandButton value="Nuevo" 
+                                            action="#{productController.resetSelectedProduct}"
+                                            update="productForm messages"
+                                            style="margin-right: 10px;"/>
+                            <p:commandButton value="Guardar Producto" 
+                                            action="#{productController.createProduct}"
+                                            update="productTable messages productForm"
+                                            style="background: #28a745; border-color: #28a745;"/>
+                        </div>
+                    </p:panel>
+                    
+                    <p:panel header="Filtros" style="margin-top: 20px;">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-8">
+                                <p:inputText id="filterName" 
+                                            value="#{productController.filterName}"
+                                            placeholder="Buscar por nombre..."
+                                            style="width: 100%"/>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                <p:commandButton value="Filtrar" 
+                                                action="#{productController.filterProducts}"
+                                                update="productTable messages"
+                                                style="margin-right: 10px;"/>
+                                <p:commandButton value="Limpiar" 
+                                                action="#{productController.clearFilters}"
+                                                update="filterName productTable messages"/>
+                            </div>
+                        </div>
+                    </p:panel>
+                    
+                    <p:panel header="Lista de Productos" style="margin-top: 20px;">
+                        <p:dataTable var="product" 
+                                    value="#{productController.products}"
+                                    paginator="true"
+                                    rows="10"
+                                    paginatorPosition="bottom"
+                                    id="productTable"
+                                    emptyMessage="No se encontraron productos">
+                            <p:column headerText="ID" style="width: 80px;">
+                                <h:outputText value="#{product.id}"/>
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{product.name}">
+                                <h:outputText value="#{product.name}"/>
+                            </p:column>
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{product.description}"/>
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Estado" style="width: 100px; text-align: center;">
+                                <h:outputText value="#{product.active ? 'Activo' : 'Inactivo'}"
+                                            style="color: #{product.active ? 'green' : 'red'}; font-weight: bold;"/>
+                            </p:column>
+                            <p:column headerText="Acciones" style="width: 200px; text-align: center;">
+                                <p:commandButton icon="pi pi-pencil" 
+                                                type="button"
+                                                onclick="PF('editProductDialog').show(); productController.selectProduct(product);"
+                                                styleClass="ui-button-warning" 
+                                                style="margin-right: 5px;"
+                                                title="Editar"/>
+                                <p:commandButton icon="pi pi-trash" 
+                                                action="#{productController.deleteProduct(product.id)}"
+                                                update="productTable messages"
+                                                styleClass="ui-button-danger"
+                                                title="Eliminar"
+                                                onclick="return confirm('¿Está seguro de eliminar este producto?');"/>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <div style="margin-top: 20px; text-align: center;">
+                            <h:outputText value="Total de productos: #{productController.productCount}" style="color: #007bff; font-weight: bold;"/>
+                        </div>
+                    </p:panel>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

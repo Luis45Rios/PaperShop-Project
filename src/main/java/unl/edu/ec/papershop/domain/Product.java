@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import unl.edu.ec.papershop.domain.Supplier;
 import java.util.Objects;
 
 @Entity
@@ -31,6 +32,11 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "provider_id")
+    private Supplier supplier;
+
 
     public Product() {
         this.price = BigDecimal.ZERO;
@@ -95,6 +101,15 @@ public class Product implements Serializable {
         this.category = category;
     }
 
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -102,10 +117,6 @@ public class Product implements Serializable {
         return Objects.equals(getId(), product.getId()) && Objects.equals(getName(), product.getName()) && Objects.equals(getCategory(), product.getCategory());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getCategory());
-    }
 
     @Override
     public String toString() {
@@ -116,6 +127,7 @@ public class Product implements Serializable {
         sb.append(", price=").append(price);
         sb.append(", active=").append(active);
         sb.append(", category=").append(category);
+        sb.append(", supplier=").append(supplier);
         sb.append('}');
         return sb.toString();
     }

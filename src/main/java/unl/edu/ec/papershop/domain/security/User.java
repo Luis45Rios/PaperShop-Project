@@ -131,6 +131,10 @@ public class User implements Serializable {
         this.organization = organization;
     }
 
+    public String getUsername() {
+        return name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

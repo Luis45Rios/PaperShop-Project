@@ -35,14 +35,36 @@ public class UserSession implements java.io.Serializable{
         user.setRoles(roles);
     }
 
-    public boolean hasPermissionForPage(String pagePath) {
+public boolean hasPermissionForPage(String pagePath) {
+        // Permitir acceso a todas las páginas del dashboard
+        if (pagePath.equals("/dashboard.xhtml") || 
+            pagePath.equals("/sales.xhtml") || 
+            pagePath.equals("/providers.xhtml") || 
+            pagePath.equals("/reports.xhtml")) {
+            return true;
+        }
         return this.hasPermission(pagePath, ActionType.READ);
     }
 
-    public boolean hasPermission(String resource, ActionType action) {
-        if (resource.equals("/dashboard.xhtml")){
+public boolean hasPermission(String resource, ActionType action) {
+        // Permitir acceso a todas las páginas del dashboard
+        if (resource.equals("/dashboard.xhtml") || 
+            resource.equals("/sales.xhtml") || 
+            resource.equals("/providers.xhtml") || 
+            resource.equals("/reports.xhtml")) {
             return true;
         }
+        
+        // Si no hay usuario, denegar acceso
+        if (user == null) {
+            return false;
+        }
+        
+        // Si no hay roles, denegar acceso
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            return false;
+        }
+        
         return user.getRoles().stream()
                 .flatMap(role -> role.getPermissions().stream())
                 .anyMatch(permission -> permission.matchWith(resource, action));
@@ -56,8 +78,20 @@ public class UserSession implements java.io.Serializable{
                 .anyMatch(role -> role.getName().equals(roleName));
     }
 
-    public User getUser() {
+public User getUser() {
         return user;
+    }
+
+    public User getCurrentUser() {
+        return user;
+    }
+
+    public void logout() {
+        this.user = null;
+    }
+
+    public boolean isLoggedIn() {
+        return this.user != null;
     }
 
 }

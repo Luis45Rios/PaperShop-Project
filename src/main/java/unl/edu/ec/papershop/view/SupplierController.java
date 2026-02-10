@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 
 @Named("supplierController")
 @ViewScoped
@@ -22,9 +23,38 @@ public class SupplierController implements Serializable {
     @Inject
     private SupplierService supplierService;
 
-    @PostConstruct
+@PostConstruct
     public void init() {
         suppliers = supplierService.findAll();
+        // Si no hay proveedores, crear datos de ejemplo
+        if (suppliers == null || suppliers.isEmpty()) {
+            createSampleSuppliers();
+        }
+    }
+
+    private void createSampleSuppliers() {
+        suppliers = new ArrayList<>();
+        
+        Supplier supplier1 = new Supplier();
+        supplier1.setId(1L);
+        supplier1.setName("Papelería Central");
+        supplier1.setEmail("central@papeleria.com");
+        supplier1.setPhone("+593-2-2345678");
+        suppliers.add(supplier1);
+
+        Supplier supplier2 = new Supplier();
+        supplier2.setId(2L);
+        supplier2.setName("Importadora del Sur");
+        supplier2.setEmail("importadora@sur.com");
+        supplier2.setPhone("+593-2-3456789");
+        suppliers.add(supplier2);
+
+        Supplier supplier3 = new Supplier();
+        supplier3.setId(3L);
+        supplier3.setName("Distribuidora Nacional");
+        supplier3.setEmail("distri@nacional.com");
+        supplier3.setPhone("+593-2-4567890");
+        suppliers.add(supplier3);
     }
 
     /* ===== NUEVO ===== */

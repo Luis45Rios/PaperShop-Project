@@ -10,7 +10,7 @@
             <!-- CONFIGURACION DE CONEXION A LA BD -->
             <!-- SOLO FUNCIONA CON transaction-type="RESOURCE_LOCAL" -->
             <!--
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgres://localhost:5434/jbrew"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5434/jbrew"/>
             <property name="jakarta.persistence.jdbc.user" value="jbrewuser"/>
             <property name="jakarta.persistence.jdbc.password" value="jbrewUser2525"/>
             -->

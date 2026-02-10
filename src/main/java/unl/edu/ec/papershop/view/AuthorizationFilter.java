@@ -35,6 +35,10 @@ public class AuthorizationFilter implements Filter {
         if (requestPath.startsWith("/public/")
                 || requestPath.equals("/login.xhtml")
                 || requestPath.equals("/index.xhtml")
+                || requestPath.equals("/dashboard.xhtml")
+                || requestPath.equals("/sales.xhtml")
+                || requestPath.equals("/providers.xhtml")
+                || requestPath.equals("/reports.xhtml")
                 || requestPath.contains("/jakarta.faces.resource/")  // Recursos de JSF
                 || requestPath.contains("/primefaces/")            // Recursos de PrimeFaces
                 ) {
@@ -56,7 +60,8 @@ public class AuthorizationFilter implements Filter {
         logger.info("-----> userSession.hasPermissionForPage: " + requestPath + " return:  " + userSession.hasPermissionForPage(requestPath));
         //System.out.println("-----> userSession.hasPermissionForPage: " + requestPath + " return:  " + userSession.hasPermissionForPage(requestPath));
 
-        if (userSession.hasPermissionForPage(requestPath)) {
+        // Permitir acceso si el usuario está autenticado
+        if (user != null) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN, "Acceso denegado");

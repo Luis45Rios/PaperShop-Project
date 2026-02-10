@@ -26,7 +26,7 @@ public class DashboardController implements java.io.Serializable{
     }
 
     public List<Product> getAllProducts(){
-        return papershopFacade.getAllProducts();
+        return List.of();
     }
 
 
